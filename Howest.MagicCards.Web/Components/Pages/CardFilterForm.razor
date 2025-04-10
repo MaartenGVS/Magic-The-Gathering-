@@ -1,0 +1,163 @@
+﻿@using Howest.MagicCards.DAL.Models
+@using Howest.MagicCards.Shared.DTO.ArtistDTO
+@using Howest.MagicCards.Shared.DTO.SetDTO
+@using Howest.MagicCards.Shared.DTO.TypeDTO
+
+@rendermode InteractiveServer
+
+
+<form @onsubmit="ApplyFilters">
+
+    <div class="form-row">
+
+        <div class="filter-group">
+            <label for="set">Set:</label>
+            <input list="set" type="text" placeholder="Select/Search" @bind="tempFilterParams.Set">
+            <datalist id="set">
+                @foreach (var set in Sets)
+                {
+                    <option value="@set.Name">@set.Name</option>
+                }
+
+            </datalist>
+        </div>
+
+        <div class="filter-group">
+            <label for="cardType">Card Type:</label>
+            <input list="cardType" type="text" placeholder="Select/Search" @bind="tempFilterParams.CardType">
+            <datalist id="cardType">
+                @foreach (var type in Types)
+                {
+                    <option value="@type.Name">@type.Name</option>
+                }
+            </datalist>
+        </div>
+
+        <div class="filter-group">
+            <label for="artist">Artist:</label>
+            <input list="artist" type="text" placeholder="Select/Search" @bind="tempFilterParams.Artist">
+            <datalist id="artist">
+                @foreach (var artist in Artists)
+                {
+                    <option value="@artist.FullName">@artist.FullName</option>
+                }
+            </datalist>
+        </div>
+
+        <div class="filter-group">
+            <label for="rarity">Rarity:</label>
+            <select id="rarity" @bind="tempFilterParams.Rarity">
+                <option value="">Select Rarity</option>
+                <option value="Uncommon">Uncommon</option>
+                <option value="Common">Common</option>
+                <option value="Rare">Rare</option>
+                <option value="Mythic">Mythic</option>
+                <option value="Special">Special</option>
+                <option value="Bonus">Bonus</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="cardName">Card Name:</label>
+            <input type="text" id="cardName" @bind="tempFilterParams.CardName">
+        </div>
+
+        <div class="filter-group">
+            <label for="cardText">Card Text:</label>
+            <input type="text" id="cardText" @bind="tempFilterParams.CardText">
+        </div>
+
+        <div class="button-group">
+
+            @if (SortParams.OrderDirection == "desc")
+            {
+                <button @onclick="@(() => OrderByChange(null))" type="button" class="icon-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="24px" width="24px" version="1.1" viewBox="0 0 301.219 301.219" xml:space="preserve">
+                    <g>
+                    <path d="M159.365,23.736v-10c0-5.523-4.477-10-10-10H10c-5.523,0-10,4.477-10,10v10c0,5.523,4.477,10,10,10h139.365   C154.888,33.736,159.365,29.259,159.365,23.736z" />
+                    <path d="M130.586,66.736H10c-5.523,0-10,4.477-10,10v10c0,5.523,4.477,10,10,10h120.586c5.523,0,10-4.477,10-10v-10   C140.586,71.213,136.109,66.736,130.586,66.736z" />
+                    <path d="M111.805,129.736H10c-5.523,0-10,4.477-10,10v10c0,5.523,4.477,10,10,10h101.805c5.523,0,10-4.477,10-10v-10   C121.805,134.213,117.328,129.736,111.805,129.736z" />
+                    <path d="M93.025,199.736H10c-5.523,0-10,4.477-10,10v10c0,5.523,4.477,10,10,10h83.025c5.522,0,10-4.477,10-10v-10   C103.025,204.213,98.548,199.736,93.025,199.736z" />
+                    <path d="M74.244,262.736H10c-5.523,0-10,4.477-10,10v10c0,5.523,4.477,10,10,10h64.244c5.522,0,10-4.477,10-10v-10   C84.244,267.213,79.767,262.736,74.244,262.736z" />
+                    <path d="M298.29,216.877l-7.071-7.071c-1.875-1.875-4.419-2.929-7.071-2.929c-2.652,0-5.196,1.054-7.072,2.929l-34.393,34.393   V18.736c0-5.523-4.477-10-10-10h-10c-5.523,0-10,4.477-10,10v225.462l-34.393-34.393c-1.876-1.875-4.419-2.929-7.071-2.929   c-2.652,0-5.196,1.054-7.071,2.929l-7.072,7.071c-3.904,3.905-3.904,10.237,0,14.142l63.536,63.536   c1.953,1.953,4.512,2.929,7.071,2.929c2.559,0,5.119-0.976,7.071-2.929l63.536-63.536   C302.195,227.113,302.195,220.781,298.29,216.877z" />
+                                </g>
+                            </svg>
+                </button>
+            }
+            else if (SortParams.OrderDirection == "asc")
+            {
+                <button @onclick="@(() => OrderByChange("desc"))" type="button" class="icon-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" height="24px" width="24px" version="1.1" viewBox="0 0 301.219 301.219" xml:space="preserve">
+                    <g>
+                    <path d="M141.854,277.484v10c0,5.523,4.477,10,10,10h139.365c5.523,0,10-4.477,10-10v-10c0-5.523-4.477-10-10-10h-139.365C146.331,267.484,141.854,271.961,141.854,277.484z" />
+                    <path d="M170.633,234.484h120.586c5.523,0,10-4.477,10-10v-10c0-5.523-4.477-10-10-10h-120.586c-5.523,0-10,4.477-10,10v10C160.633,229.007,165.11,234.484,170.633,234.484z" />
+                    <path d="M189.414,171.484h101.805c5.523,0,10-4.477,10-10v-10c0-5.523-4.477-10-10-10h-101.805c-5.523,0-10,4.477-10,10v10C179.414,166.007,183.891,171.484,189.414,171.484z" />
+                    <path d="M208.195,101.484h83.025c5.522,0,10-4.477,10-10v-10c0-5.523-4.477-10-10-10h-83.025c-5.523,0-10,4.477-10,10v10C198.195,96.007,202.672,101.484,208.195,101.484z" />
+                    <path d="M226.976,38.484h64.244c5.522,0,10-4.477,10-10v-10c0-5.523-4.477-10-10-10h-64.244c-5.523,0-10,4.477-10,10v10C216.976,33.007,221.453,38.484,226.976,38.484z" />
+                    <path d="M2.93,84.342l7.071,7.071c1.876,1.875,4.419,2.929,7.071,2.929c2.652,0,5.196-1.054,7.072-2.929l34.393-34.393V292.484c0,5.523,4.477,10,10,10h10c5.523,0,10-4.477,10-10V67.522l34.393,34.393c1.876,1.875,4.419,2.929,7.071,2.929c2.652,0,5.196-1.054,7.071-2.929l7.072-7.071c3.904-3.905,3.904-10.237,0-14.142l-63.536-63.536c-1.953-1.953-4.512-2.929-7.071-2.929c-2.559,0-5.119,0.976-7.071,2.929L2.93,70.2C-1.976,81.436-1.976,87.768,2.93,91.673V84.342z" />
+                                </g>
+                            </svg>
+                </button>
+            }
+            else
+            {
+                <button @onclick="@(() => OrderByChange("asc"))" type="button" class="icon-button">
+                    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800px" height="800px" viewBox="0 0 24.75 24.75" xml:space="preserve">
+                    <g>
+                    <path d="M0,3.875c0-1.104,0.896-2,2-2h20.75c1.104,0,2,0.896,2,2s-0.896,2-2,2H2C0.896,5.875,0,4.979,0,3.875z M22.75,10.375H2   c-1.104,0-2,0.896-2,2c0,1.104,0.896,2,2,2h20.75c1.104,0,2-0.896,2-2C24.75,11.271,23.855,10.375,22.75,10.375z M22.75,18.875H2   c-1.104,0-2,0.896-2,2s0.896,2,2,2h20.75c1.104,0,2-0.896,2-2S23.855,18.875,22.75,18.875z" />
+                                </g>
+                              </svg>
+                </button>
+            }
+
+            <button type="submit">Apply Filters</button>
+        </div>
+    </div>
+</form>
+
+
+
+@code {
+    @code {
+        [Parameter]
+        public EventCallback<string> OnOrderByChange { get; set; }
+
+        [Parameter]
+        public IEnumerable<ArtistReadDTO> Artists { get; set; }
+
+        [Parameter]
+        public IEnumerable<TypeReadDTO> Types { get; set; }
+
+        [Parameter]
+        public IEnumerable<SetReadDTO> Sets { get; set; }
+
+        [Parameter]
+        public CardSortParams SortParams { get; set; }
+
+        [Parameter]
+        public EventCallback<CardFilterParams> OnApplyFilters { get; set; }
+
+
+        private (string Set, string CardType, string Artist, string Rarity, string CardName, string CardText) tempFilterParams = ("", "", "", "", "", "");
+
+        private async Task ApplyFilters()
+        {
+            CardFilterParams filterParams = new CardFilterParams(
+                tempFilterParams.Set,
+                tempFilterParams.CardType,
+                tempFilterParams.Artist,
+                tempFilterParams.Rarity,
+                tempFilterParams.CardName,
+                tempFilterParams.CardText
+            );
+
+            await OnApplyFilters.InvokeAsync(filterParams);
+        }
+
+        private async Task OrderByChange(string orderBy)
+        {
+            await OnOrderByChange.InvokeAsync(orderBy);
+        }
+    }
+
+}

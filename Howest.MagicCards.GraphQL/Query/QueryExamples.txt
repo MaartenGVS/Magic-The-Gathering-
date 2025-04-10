@@ -1,0 +1,71 @@
+query GetAllCards {
+  cards {
+    id
+    name
+    artist {
+      id
+      fullName
+    }
+  }
+}
+
+
+query GetAllCardsWithLimit {
+  cards(limit: 4) {
+    id
+    name
+    artist {
+      id
+      fullName
+    }
+  }
+}
+
+
+query GetCardsWithPowerAndToughness  {
+  cards(power: 4 toughness: 7) {
+    id
+    name
+    power
+    toughness
+  }
+}
+
+
+query GetCardsWithPowerAndToughnessWithLimit  {
+  cards(power: 4 toughness: 7 limit: 2) {
+    id
+    name
+    power
+    toughness
+  }
+}
+
+
+query GetCardsWithPowerToughnessAndArtist  {
+  cards(power: 4 toughness: 7) {
+    id
+    name
+    power
+    toughness
+     artist {
+      id
+      fullName
+    }
+  }
+}
+
+
+query GetArtistById  {
+  artist(id: 8) {
+    id
+    fullName
+    cards {
+      id
+      name
+      artist {
+        id
+      }
+    }
+  }
+}

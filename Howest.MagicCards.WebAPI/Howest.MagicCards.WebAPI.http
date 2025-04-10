@@ -1,0 +1,6 @@
+@Howest.MagicCards.WebAPI_HostAddress = http://localhost:5257
+
+GET {{Howest.MagicCards.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

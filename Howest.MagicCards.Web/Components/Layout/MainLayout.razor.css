@@ -1,0 +1,23 @@
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333333;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+main header {
+    min-width: 100%;
+}
+
+header img.header-image {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 14.5rem;
+    max-height: 14.5rem;
+    object-fit: unset;
+}

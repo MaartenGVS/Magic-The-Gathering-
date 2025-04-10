@@ -1,0 +1,35 @@
+@rendermode InteractiveServer
+
+<div class="container">
+    <MatToastContainer />
+    <MatPortalHost />
+
+    <CardFilterForm 
+        Artists="_artists"
+        Types="_types"
+        Sets="_sets"
+        SortParams="_sortParams"
+        OnApplyFilters="HandleApplyFilters"
+        OnOrderByChange="HandleOrderByChange" 
+     />
+
+    <CardList 
+        Cards="_cards"
+        DeckEntries="_deckEntries"
+        CurrentPage="@_currentPage"
+        PageSize="@_pageSize"
+        TotalPages="@_totalPages"
+        HasPrevDeck="@_hasPrevDeck"
+        OnHandlePageChange="HandlePageChange"
+        OnHandlePageSizeChange="HandlePageSizeChange"
+        OnAddCardToDeck="HandleAddCardToDeck"
+        OnIncrementDeckEntry="HandleIncrementDeckEntry"
+        OnDecrementDeckEntry="HandleDecrementDeckEntry"
+        OnClearDeck="HandleClearDeck"
+        OnResetPrevDeck="HandleResetPrevDeck"
+     >
+        <LoadingTemplate>
+            <MatProgressCircle Indeterminate="true" Size="MatProgressCircleSize.Large" FourColored />
+        </LoadingTemplate>
+    </CardList>
+</div>
